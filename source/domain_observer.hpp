@@ -42,11 +42,15 @@ public:
    domain_observer & operator=(const domain_observer &  other) = delete;
    domain_observer & operator=(      domain_observer && other) = delete;
    
-   virtual ~domain_observer();
+   ~domain_observer() = default;
    
    void update(std::future<query_result> && result_future);
+   void stop();
    
+   // This method should be called before work to load data.
    bool load_domains();
+   // The method allows to retrieve a observable domain in cyclic order.
+   // When cycle is over function return false, othervise true;
    bool grab_domain (domain_entry & domain) const;
    
 private:

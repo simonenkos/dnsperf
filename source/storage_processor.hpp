@@ -6,6 +6,10 @@
 #include "query_result.hpp"
 #include "domain_entry.hpp"
 
+/**
+ * Interface for a storage. Should not keep any state.
+ * For this purpose all method marked as const.
+ */
 struct storage_processor
 {
    storage_processor() = default;

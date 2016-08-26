@@ -11,13 +11,6 @@ domain_observer::domain_observer(const storage_processor & processor) : processo
    observer_thread_ = std::thread { & domain_observer::run, this };
 }
 
-domain_observer::~domain_observer()
-{
-   is_stopped_ = true;
-   
-   if (observer_thread_.joinable()) observer_thread_.join();
-}
-
 void domain_observer::update(std::future <query_result> && result_future)
 {
    std::lock_guard<std::mutex> lock { queries_mutex_ };
@@ -25,6 +18,15 @@ void domain_observer::update(std::future <query_result> && result_future)
       results_.emplace(std::move(result_future));
       new_results_available_.notify_one();
    }
+}
+
+void domain_observer::stop()
+{
+   is_stopped_ = true;
+   // To prevent waiting forever.
+   new_results_available_.notify_one();
+   
+   if (observer_thread_.joinable()) observer_thread_.join();
 }
 
 bool domain_observer::load_domains()
@@ -63,8 +65,6 @@ bool domain_observer::update_domain(const std::string & domain, uint32_t latency
       return false;
    
    domain_entry tmp_domain = domain_it->second;
-   
-//   time_t timestamp = std::time(nullptr);
    
    if (tmp_domain.query_count == 0)
    {
@@ -117,6 +117,8 @@ void domain_observer::run()
    
          new_results_available_.wait(lock);
    
+         if (results_.empty()) continue;
+         
          fut = std::move(results_.front());
          {
             results_.pop();
@@ -138,7 +140,10 @@ void domain_observer::run()
       }
       catch (const std::exception & error)
       {
+         // ToDo: Save exception to return for update method to inform main thread about errors.
          std::cerr << error.what() << std::endl;
       }
    }
+   
+   while (!results_.empty()) results_.pop();
 }

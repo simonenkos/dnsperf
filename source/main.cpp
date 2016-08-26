@@ -1,4 +1,5 @@
 #include <iostream>
+#include <csignal>
 #include <chrono>
 
 #include <boost/program_options.hpp>
@@ -82,6 +83,9 @@ int main(int argc, const char * const * argv)
       return EXIT_FAILURE;
    }
    
+   std::signal(SIGINT,  signal_handler);
+   std::signal(SIGTERM, signal_handler);
+   
    query_generator gen;
    ldns_query_processor query_proc;
    mysql_storage_processor storage_proc { db_name, db_host, username, password };
@@ -89,7 +93,7 @@ int main(int argc, const char * const * argv)
    
    if (!observer.load_domains())
    {
-      std::cerr << "Cannot load domains data from database!";
+      std::cerr << "cannot load domains data from database...";
       return EXIT_FAILURE;
    }
    
@@ -108,6 +112,7 @@ int main(int argc, const char * const * argv)
       std::this_thread::sleep_for(std::chrono::seconds(frequency));
    }
    
+   observer.stop();
    std::cout << "stopped..." << std::endl;
    return EXIT_SUCCESS;
 }

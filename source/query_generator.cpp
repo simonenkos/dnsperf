@@ -5,13 +5,15 @@
 namespace
 {
 
-const static std::string CHARSET                = "1234567890ABCDEF";
+const static std::string CHARSET                = "1234567890"
+                                                  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                  "abcdefghijklmnopqrstuvwxyz";
 const static unsigned    MIN_RANDOM_DOMAIN_SIZE = 3;
 const static unsigned    MAX_RANDOM_DOMAIN_SIZE = 9;
    
 }
 
-query_generator::query_generator() : char_distribution_ { 0, static_cast<unsigned int>(CHARSET.size() - 1) },
+query_generator::query_generator() : char_distribution_ { 0, static_cast<unsigned>(CHARSET.size() - 1) },
                                      size_distribution_ { MIN_RANDOM_DOMAIN_SIZE, MAX_RANDOM_DOMAIN_SIZE }
 { }
 
