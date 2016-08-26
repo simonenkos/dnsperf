@@ -93,7 +93,8 @@ int main(int argc, const char * const * argv)
    
    if (!observer.load_domains())
    {
-      std::cerr << "cannot load domains data from database...";
+      std::cerr << "cannot load domains data from database..." << std::endl;
+      observer.stop();
       return EXIT_FAILURE;
    }
    

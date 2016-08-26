@@ -53,7 +53,7 @@ bool mysql_storage_processor::load_domains(std::map<std::string, domain_entry> &
       return false;
    }
    
-   mysqlpp::Query query { & connection };
+   mysqlpp::Query query { & connection, false };
    {
       query << "select * from domains";
    }
