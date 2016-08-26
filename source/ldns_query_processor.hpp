@@ -16,7 +16,7 @@ public:
    
    virtual ~ldns_query_processor() = default;
    
-   virtual query_result process(const std::string & url) override;
+   virtual query_result process(const std::string & url) const override;
 };
 
 #endif //DNSPERF_LDNS_QUERY_PROCESSOR_HPP

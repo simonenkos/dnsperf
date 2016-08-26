@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "query_processor.hpp"
-#include "query_storage_processor.hpp"
+#include "storage_processor.hpp"
 
 class query_generator
 {
@@ -25,9 +25,9 @@ public:
    
    ~query_generator() = default;
    
-   std::future<query_result> generate(const std::string & url,
-                                      std::unique_ptr<query_processor> && query_processor_ptr,
-                                      std::unique_ptr<query_storage_processor> && query_storage_processor_ptr);
+   std::future<query_result> generate(const domain_entry      & domain,
+                                      const query_processor   & query_processor,
+                                      const storage_processor & storage_processor);
 };
 
 #endif //DNSPERF_QUERY_GENERATOR_HPP

@@ -4,13 +4,10 @@
 
 #include "ldns_query_processor.hpp"
 
-namespace media
-{
-
 ldns_query_processor::ldns_query_processor()
 {}
 
-query_result ldns_query_processor::process(const std::string & url)
+query_result ldns_query_processor::process(const std::string & url) const
 {
    auto domain_ptr = ldns_dname_new_frm_str(url.c_str());
    
@@ -39,5 +36,3 @@ query_result ldns_query_processor::process(const std::string & url)
    }
    return result;
 }
-
-} // namespace media

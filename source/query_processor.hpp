@@ -17,11 +17,11 @@ struct query_processor
    query_processor(      query_processor && other) = default;
    
    query_processor & operator=(const query_processor &  other) = default;
-   query_processor & operator=(const query_processor && other) = default;
+   query_processor & operator=(      query_processor && other) = default;
    
    virtual ~query_processor() = default;
    
-   virtual query_result process(const std::string & url) = 0;
+   virtual query_result process(const std::string & url) const = 0;
 };
 
 #endif //DNSPERF_QUERY_PROCESSOR_HPP
